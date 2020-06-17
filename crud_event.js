@@ -30,12 +30,23 @@ apiRouter.route('/event-api/private/role-admin/event')
 	var newValueOfEventToUpdate = req.body;
 	console.log("PUT,newValueOfEventToUpdate="+JSON.stringify(newValueOfEventToUpdate));
 	myGenericMongoClient.genericUpdateOne('eventtest',
-	newValueOfEventToUpdate.code ,
-	{ nom : newValueOfEventToUpdate.nom , 
-	  change : newValueOfEventToUpdate.change} ,
+	newValueOfEventToUpdate._id ,
+	{ 
+		title1 : newValueOfEventToUpdate.title1,
+		title2 : newValueOfEventToUpdate.title2,
+		img1: newValueOfEventToUpdate.img1, 
+		img2: newValueOfEventToUpdate.img2, 
+		description: newValueOfEventToUpdate.description,
+		date : newValueOfEventToUpdate.date, 
+		lieu: newValueOfEventToUpdate.lieu, 
+		email: newValueOfEventToUpdate.email, 
+		siteWeb: newValueOfEventToUpdate.siteWeb,
+		tags: newValueOfEventToUpdate.tags, 
+
+	} ,
 	function(err,event){
 			if(err){
-				res.status(404).json({ error : "no devise to update with code=" + newValueOfEventToUpdate.code });
+				res.status(404).json({ error : "no event to update with id=" + newValueOfEventToUpdate.title1 });
 			}else{
 					res.send(newValueOfEventToUpdate);
 			 }
