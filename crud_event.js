@@ -25,7 +25,7 @@ apiRouter.route('/event-api/private/event')
 // http://localhost:3000/event-api/private/role-admin/event en mode PUT
 // avec { "title1" : "mxyz" , "title2" : "monnaieXyz", "img1" : "null", "img2" : "null", "description" : "null", "date" : "null", "lieu": "null", "email": "null", 
 //    "siteWeb": "null", "tags" : "null" } dans req.body
-apiRouter.route('/event-api/private/role-admin/event')
+apiRouter.route('/event-api/private/role-admin/updateEvent')
 .put( function(req , res  , next ) {
 	var newValueOfEventToUpdate = req.body;
 	console.log("PUT,newValueOfEventToUpdate="+JSON.stringify(newValueOfEventToUpdate));
