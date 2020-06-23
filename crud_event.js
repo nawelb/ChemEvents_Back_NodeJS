@@ -167,13 +167,13 @@ apiRouter.route('/event-api/private/role-admin/event/:title1')
 
 //DELETE BY ID
 // http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
-apiRouter.route('/event-api/private/role-admin/event/:_id')
+apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 .delete( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericDeleteOneById('eventtest',idEvent,
+	myGenericMongoClient.genericRemove('eventtest', { _id : idEvent } ,
 									     function(err,event){
-										     res.send(idEvent );
+										     res.send({ Deleted :idEvent} );
 									    });
 });
 

@@ -80,15 +80,16 @@ var genericRemove = function(collectionName,query,callback_with_err_and_result) 
 			console.log("genericRemove error = " + err);
 				}
 		//if (err) throw err;
-		console.log(obj.result.n + " document(s) deleted");
-		callback_with_err_and_result(err,obj.result);
+		//console.log(obj.result.n + " document(s) deleted");
+		//callback_with_err_and_result(err,obj.result);
+		callback_with_err_and_result(err,obj);
 		});
    });
 };
 
 var genericDeleteOneById = function(collectionName,mongoIdAsString,callback_with_err_and_booleanResult) {
 	executeInMongoDbConnection( function(db) {
-		db.collection(collectionName).deleteOne( { '_id' : new ObjectID(mongoIdAsString)} ,function(err, obj) {
+		db.collection(collectionName).deleteOne( { '_id' : mongoIdAsString} ,function(err, obj) {
 		if(err!=null) {
 			console.log("genericDeleteOneById error = " + err);
 			callback_with_err_and_booleanResult(err,false);
