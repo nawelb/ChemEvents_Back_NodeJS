@@ -3,7 +3,8 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
-var mongoDbUrl = 'mongodb://127.0.0.1:27017/test'; //by default
+//var mongoDbUrl = 'mongodb://127.0.0.1:27017/test'; //by default
+var mongoDbUrl = 'mongodb+srv://Nawel:MongoDB@mongodbatlascluster-t0n3g.mongodb.net/test?retryWrites=true&w=majority;'; //on MongoDB Atlas 
 var dbName = "test" //by default
 var currentDb=null; //current MongoDB connection
 

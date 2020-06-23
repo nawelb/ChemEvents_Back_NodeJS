@@ -9,7 +9,7 @@ var myGenericMongoClient = require('./my_generic_mongo_client');
 // http://localhost:3000/event-api/private/role-admin/event en mode post
 // avec { "title1" : "mxyz" , "title2" : "monnaieXyz", "img1" : "null", "img2" : "null", "description" : "null", "date" : "null", "lieu": "null", "email": "null", 
 //    "siteWeb": "null", "tags" : "null" } dans req.body
-apiRouter.route('/event-api/private/role-admin/event')
+apiRouter.route('/event-api/private/event')
 .post( function(req , res  , next ) {
 	var nouvelEvent = req.body;
 	console.log("POST,nouvelEvent="+JSON.stringify(nouvelEvent));
@@ -38,7 +38,14 @@ apiRouter.route('/event-api/private/role-admin/event')
 		img2: newValueOfEventToUpdate.img2, 
 		description: newValueOfEventToUpdate.description,
 		date : newValueOfEventToUpdate.date, 
-		lieu: newValueOfEventToUpdate.lieu, 
+		dateDebut : newValueOfEventToUpdate.dateDebut,
+		dateFin : newValueOfEventToUpdate.dateFin,
+		lieu: newValueOfEventToUpdate.lieu,
+		city :  newValueOfEventToUpdate.city,
+		country : newValueOfEventToUpdate.country,
+		submitAbstract : newValueOfEventToUpdate.submitAbstract,
+		register : newValueOfEventToUpdate.register,
+		usefullLinks : newValueOfEventToUpdate.usefullLinks,
 		email: newValueOfEventToUpdate.email, 
 		siteWeb: newValueOfEventToUpdate.siteWeb,
 		tags: newValueOfEventToUpdate.tags, 
@@ -46,15 +53,105 @@ apiRouter.route('/event-api/private/role-admin/event')
 	} ,
 	function(err,event){
 			if(err){
-				res.status(404).json({ error : "no event to update with id=" + newValueOfEventToUpdate.title1 });
+				res.json({ error : "no event to update with id=" + newValueOfEventToUpdate._id });
 			}else{
 					res.send(newValueOfEventToUpdate);
 			 }
 	});	//end of genericUpdateOne()
 });
 
-//DELETE BY TITLE1
-/*
+
+//GET ALL
+//exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
+//             http://localhost:8282/devise-api/public/devise?dateMini=2020-01-01
+apiRouter.route('/event-api/public/events')
+.get( function(req , res  , next ) {
+	var changeMini = req.query.changeMini;
+	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
+	myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+		   res.send(event);
+	});//end of genericFindList()
+});
+
+ //GET BY ID
+//exemple URL: http://localhost:3000/event-api/public/event/c
+apiRouter.route('/event-api/public/event/:_id')
+.get( function(req , res  , next ) {
+	var idEvent = req.params._id;
+	console.log("OOOKKK")
+	myGenericMongoClient.genericFindOne('eventtest',
+										{ '_id' : idEvent },
+									    function(err,event){
+										   res.send(event);
+									   });
+}); 
+
+
+//GET COMBINAISON CITY COUNTRY
+//exemple URL: localhost:3000/event-api/public/event (returning all devises)
+//             http://localhost:3000/event-api/public/event?country=France
+apiRouter.route('/event-api/public/event')
+.get( function(req , res  , next ) {
+	var cityParam = req.query.city;
+	var countryParam = req.query.country;
+
+if (cityParam != undefined){
+	var mongoQuery = cityParam ? { city : cityParam } : { } ;
+	console.log("city" + cityParam)
+
+}else {
+	var mongoQuery = countryParam ? { country : countryParam } : { } ;
+	console.log("country" + countryParam)
+}
+
+//var cityParam = req.params.city;
+ myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
+	if (err)
+		res.send(err);
+
+	res.json(event);
+}); 
+	
+});
+
+
+// BOTH WORKING
+/* //GET By CITY
+//exemple URL: localhost:3000/event-api/public/event (returning all devises)
+//             http://localhost:3000/event-api/public/event?city=Paris
+apiRouter.route('/event-api/public/event')
+.get( function(req , res  , next ) {
+	var cityParam = req.query.city;
+	var mongoQuery = cityParam ? { city : cityParam } : { } ;
+	//var cityParam = req.params.city;
+		console.log("city "+cityParam)
+	 myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
+        if (err)
+            res.send(err);
+
+        res.json(event);
+    }); 
+});
+
+//GET By COUNTRY
+//exemple URL: localhost:3000/event-api/public/event (returning all devises)
+//             http://localhost:3000/event-api/public/event?country=France
+apiRouter.route('/event-api/public/event')
+.get( function(req , res  , next ) {
+	var countryParam = req.query.country;
+	var mongoQuery = countryParam ? { country : countryParam } : { } ;
+	//var cityParam = req.params.city;
+		console.log("country" + countryParam)
+	 myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
+        if (err)
+            res.send(err);
+
+        res.json(event);
+    }); 
+}); */
+
+/* //DELETE BY TITLE1
+
 //work well, commented to test other delete function
 // http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
 apiRouter.route('/event-api/private/role-admin/event/:title1')
@@ -65,8 +162,8 @@ apiRouter.route('/event-api/private/role-admin/event/:title1')
 									     function(err,event){
 										     res.send({ deletedEvent : idEvent } );
 									    });
-});
-*/
+}); */
+
 
 //DELETE BY ID
 // http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
@@ -74,62 +171,25 @@ apiRouter.route('/event-api/private/role-admin/event/:_id')
 .delete( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericRemove('eventtest',{ _id : idEvent },
+	myGenericMongoClient.genericDeleteOneById('eventtest',idEvent,
 									     function(err,event){
-										     res.send({ deletedEvent : idEvent } );
+										     res.send(idEvent );
 									    });
 });
 
 
 
-
-
-//GET ALL
-//exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
-//             http://localhost:8282/devise-api/public/devise?dateMini=2020-01-01
-apiRouter.route('/event-api/public/event')
-.get( function(req , res  , next ) {
-	var changeMini = req.query.changeMini;
-	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
-	myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
-		   res.send(event);
-	});//end of genericFindList()
-});
-
-//GET BY ID
+ //GET BY TITLE1
 //exemple URL: http://localhost:3000/event-api/public/event/c
-apiRouter.route('/event-api/public/event/:_id')
+apiRouter.route('/event-api/public/event/:title1')
 .get( function(req , res  , next ) {
-	var idEvent = req.params._id;
+	var title1 = req.params.title1;
 	myGenericMongoClient.genericFindOne('eventtest',
-										{ '_id' : idEvent },
+										{ 'title1' : title1 },
 									    function(err,event){
-										   res.send({idEvent : event});
+										   res.send( event);
 									   });
-	
-});
+}); 
 
-/* //GET ALL
-//exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
-//             http://localhost:8282/devise-api/public/devise?changeMini=1.05
-apiRouter.route('/event-api/public/event')
-.get( function(req , res  , next ) {
-	//var changeMini = req.query.changeMini;
-	var mongoQuery = { } ;
-	myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
-		   res.send({mongoQuery : event});
-	});//end of genericFindList()
-}); */
-
-//GET ALL
-//exemple URL: http://localhost:3000/devise-api/public/devise (returning all devises)
-//             http://localhost:8282/devise-api/public/devise?changeMini=1.05
-/* apiRouter.route('/event-api/public/event')
-.get(function(req , res  , next ) {
-	//var changeMini = req.query.changeMini;
-	myGenericMongoClient.genericFindList('eventtest', {},function(err,events){
-		   res.send({events});
-	});//end of genericFindList()
-}); */
 
 exports.apiRouter = apiRouter;
