@@ -87,7 +87,7 @@ apiRouter.route('/event-api/public/event/:_id')
 }); 
 
 
-//GET COMBINAISON CITY COUNTRY
+//GET COMBINAISON CITY & COUNTRY
 //exemple URL: localhost:3000/event-api/public/event (returning all devises)
 //             http://localhost:3000/event-api/public/event?country=France
 apiRouter.route('/event-api/public/event')
@@ -97,14 +97,12 @@ apiRouter.route('/event-api/public/event')
 
 if (cityParam != undefined){
 	var mongoQuery = cityParam ? { city : cityParam } : { } ;
-	console.log("city" + cityParam)
+	//console.log("city" + cityParam)
 
 }else {
 	var mongoQuery = countryParam ? { country : countryParam } : { } ;
-	console.log("country" + countryParam)
+	//console.log("country" + countryParam)
 }
-
-//var cityParam = req.params.city;
  myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
 	if (err)
 		res.send(err);
@@ -114,8 +112,51 @@ if (cityParam != undefined){
 	
 });
 
+//DELETE BY ID
+// http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
+apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
+.delete( function(req , res  , next ) {
+	var idEvent = req.params._id;
+	console.log("DELETE,eventId="+idEvent);
+	myGenericMongoClient.genericRemove('eventtest', { _id : idEvent } ,
+									     function(err,event){
+										     res.send({ Deleted :idEvent} );
+									    });
+});
 
-// BOTH WORKING
+
+
+
+
+
+
+//SERACH BY KEY WORD
+
+
+/* apiRouter.route('/event-api/public/events/search')
+.get( function(req , res  , next ) {
+	var cityParam = req.query.city;
+	var countryParam = req.query.country;
+	var changeMini = req.query.changeMini;
+	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
+	var allEvents = myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+																						res.send(event);
+	for(let event of allEvents){
+
+		console.log(event);
+	}																			});
+	  var mongoQuery = countryParam ? { country : countryParam } : { } ;
+	for(let event of allEvents){
+			if req
+	} 
+
+
+	
+	//end of genericFindList()
+}); */
+
+
+// BOTH WORKING COUNTRY AND CITY ALONE, NOT TOGETHER
 /* //GET By CITY
 //exemple URL: localhost:3000/event-api/public/event (returning all devises)
 //             http://localhost:3000/event-api/public/event?city=Paris
@@ -150,36 +191,9 @@ apiRouter.route('/event-api/public/event')
     }); 
 }); */
 
-/* //DELETE BY TITLE1
-
-//work well, commented to test other delete function
-// http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
-apiRouter.route('/event-api/private/role-admin/event/:title1')
-.delete( function(req , res  , next ) {
-	var idEvent = req.params.title1;
-	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericRemove('eventtest',{ title1 : idEvent },
-									     function(err,event){
-										     res.send({ deletedEvent : idEvent } );
-									    });
-}); */
 
 
-//DELETE BY ID
-// http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
-apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
-.delete( function(req , res  , next ) {
-	var idEvent = req.params._id;
-	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericRemove('eventtest', { _id : idEvent } ,
-									     function(err,event){
-										     res.send({ Deleted :idEvent} );
-									    });
-});
-
-
-
- //GET BY TITLE1
+/*  //GET BY TITLE1
 //exemple URL: http://localhost:3000/event-api/public/event/c
 apiRouter.route('/event-api/public/event/:title1')
 .get( function(req , res  , next ) {
@@ -189,7 +203,7 @@ apiRouter.route('/event-api/public/event/:title1')
 									    function(err,event){
 										   res.send( event);
 									   });
-}); 
+}); */ 
 
 
 exports.apiRouter = apiRouter;
