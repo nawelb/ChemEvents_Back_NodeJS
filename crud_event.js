@@ -62,8 +62,8 @@ apiRouter.route('/event-api/private/role-admin/updateEvent')
 
 
 //GET ALL
-//exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
-//             http://localhost:8282/devise-api/public/devise?dateMini=2020-01-01
+//exemple URL: http://localhost:3000/devise-api/public/devise (returning all event)
+//             http://localhost:3000/devise-api/public/devise?changeMini=2020-01-01
 apiRouter.route('/event-api/public/events')
 .get( function(req , res  , next ) {
 	var changeMini = req.query.changeMini;
@@ -110,7 +110,9 @@ if (cityParam != undefined){
 	res.json(event);
 }); 
 	
-});
+}); 
+
+
 
 //DELETE BY ID
 // http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
@@ -129,31 +131,31 @@ apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 
 
 
-
-//SERACH BY KEY WORD
-
-
-/* apiRouter.route('/event-api/public/events/search')
+//GET BY KEY WORD
+//exemple URL: http://localhost:3000/devise-api/public/devise (returning all event)
+//             http://localhost:3000/event-api/public/search?research=word
+apiRouter.route('/event-api/public/search')
 .get( function(req , res  , next ) {
-	var cityParam = req.query.city;
-	var countryParam = req.query.country;
-	var changeMini = req.query.changeMini;
-	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
-	var allEvents = myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
-																						res.send(event);
-	for(let event of allEvents){
+	var research = req.query.research;
 
-		console.log(event);
-	}																			});
-	  var mongoQuery = countryParam ? { country : countryParam } : { } ;
-	for(let event of allEvents){
-			if req
-	} 
+	console.log("coucou dans crud")
+/* 	var mongoQuery = {title1: { $regex: research} } ;*/
+		var mongoQuery = { $or: [ 
+			{title1: { $regex: research, $options:'i'} }, 
+			{title2: { $regex: research, $options:'i'} } , 
+			{description: { $regex: research, $options:'i'} }, 
+			{tags: { $regex: research, $options:'i'} },  
+			{city: { $regex: research, $options:'i'} }, 
+			{country: { $regex: research, $options:'i'} } 
+		] } ;
+		myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+			   res.send(event);
+		});//end of genericFindList()
+});
 
 
-	
-	//end of genericFindList()
-}); */
+
+
 
 
 // BOTH WORKING COUNTRY AND CITY ALONE, NOT TOGETHER
@@ -192,18 +194,6 @@ apiRouter.route('/event-api/public/event')
 }); */
 
 
-
-/*  //GET BY TITLE1
-//exemple URL: http://localhost:3000/event-api/public/event/c
-apiRouter.route('/event-api/public/event/:title1')
-.get( function(req , res  , next ) {
-	var title1 = req.params.title1;
-	myGenericMongoClient.genericFindOne('eventtest',
-										{ 'title1' : title1 },
-									    function(err,event){
-										   res.send( event);
-									   });
-}); */ 
 
 
 exports.apiRouter = apiRouter;
