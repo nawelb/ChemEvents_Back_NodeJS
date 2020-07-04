@@ -1,12 +1,7 @@
 //les routes en /html/... seront gérées par express
 //par de simples renvois des fichiers statiques du répertoire "./html"
+require('dotenv').config()
 var express = require('express');
-
-///************//
-//Manage Environement Variables
-require('dotenv').config();
-//console.log(process.env);
-///************//
 
 var scfApiEvents = require('./crud_event');
 
@@ -14,8 +9,8 @@ var app = express();
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json() ;
-
-app.listen(process.env.PORT || 3000 , function () {
+const port=process.env.PORT || 3000;
+app.listen(port , function () {
 	console.log("http://localhost:3000");
 });
 	

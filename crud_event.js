@@ -16,7 +16,7 @@ apiRouter.route('/event-api/private/event')
 	nouvelEvent._id=nouvelEvent.title1;
 	myGenericMongoClient.genericInsertOne('eventtest',
                                             nouvelEvent,
-									     function(err,event){
+									     function(err, event ){
 										     res.send(nouvelEvent);
 									    });
 });
