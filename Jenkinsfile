@@ -11,7 +11,7 @@ node () {
 		bat """ 
 		git branch
 		git checkout master
-		git push heroku master		
+		git push heroku origin/master:master	
 		"""		// Batch build step
 	}
 }
