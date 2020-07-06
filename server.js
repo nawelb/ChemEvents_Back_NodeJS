@@ -1,14 +1,16 @@
 //les routes en /html/... seront gérées par express
 //par de simples renvois des fichiers statiques du répertoire "./html"
+require('dotenv').config()
 var express = require('express');
+
 var scfApiEvents = require('./crud_event');
 
 var app = express();
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json() ;
-
-app.listen(3000 , function () {
+const port=process.env.PORT || 3000;
+app.listen(port , function () {
 	console.log("http://localhost:3000");
 });
 	
@@ -27,9 +29,3 @@ app.use(jsonParser);
 app.use('/html', express.static(__dirname+"/html"));
 app.use(scfApiEvents.apiRouter); //delegate REST API routes to apiRouter(s)
 
-	
-/*	
-app.get('/', function(req , res ) {
-	res.redirect('/html/index.html');
-});
-*/

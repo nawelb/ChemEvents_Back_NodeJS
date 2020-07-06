@@ -3,8 +3,12 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
-var mongoDbUrl = 'mongodb://127.0.0.1:27017/test'; //by default
-var dbName = "test" //by default
+//var mongoDbUrl = 'mongodb://127.0.0.1:27017/test'; //by default
+//var mongoDbUrl = process.env.DB_URL; //on MongoDB Atlas 
+var mongoDbUrl ='mongodb+srv://Nawel:MongoDB@mongodbatlascluster-t0n3g.mongodb.net/test?retryWrites=true&w=majority;'
+
+//var dbName =process.env.DB_NAME //by default
+var dbName ='test'
 var currentDb=null; //current MongoDB connection
 
 var setMongoDbUrl = function(dbUrl){
@@ -72,6 +76,8 @@ var genericFindList = function(collectionName,query,callback_with_err_and_array)
    });
 };
 
+
+
 var genericRemove = function(collectionName,query,callback_with_err_and_result) {
 	executeInMongoDbConnection( function(db) {
 		db.collection(collectionName).remove(query ,function(err, obj) {
@@ -79,15 +85,16 @@ var genericRemove = function(collectionName,query,callback_with_err_and_result) 
 			console.log("genericRemove error = " + err);
 				}
 		//if (err) throw err;
-		console.log(obj.result.n + " document(s) deleted");
-		callback_with_err_and_result(err,obj.result);
+		//console.log(obj.result.n + " document(s) deleted");
+		//callback_with_err_and_result(err,obj.result);
+		callback_with_err_and_result(err,obj);
 		});
    });
 };
 
 var genericDeleteOneById = function(collectionName,mongoIdAsString,callback_with_err_and_booleanResult) {
 	executeInMongoDbConnection( function(db) {
-		db.collection(collectionName).deleteOne( { '_id' : new ObjectID(mongoIdAsString)} ,function(err, obj) {
+		db.collection(collectionName).deleteOne( { '_id' : mongoIdAsString} ,function(err, obj) {
 		if(err!=null) {
 			console.log("genericDeleteOneById error = " + err);
 			callback_with_err_and_booleanResult(err,false);
