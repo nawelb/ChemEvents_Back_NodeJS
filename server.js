@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json() ;
 const port= process.env.PORT ||  PORT ;
 app.listen(port , function () {
-	console.log("http://localhost:3000");
+	console.log("http://localhost: "+ port);
 });
 	
 // CORS enabled with express/node-js : 
