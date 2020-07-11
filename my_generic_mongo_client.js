@@ -3,12 +3,8 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
-//var mongoDbUrl = 'mongodb://127.0.0.1:27017/test';
 var mongoDbUrl = process.env.DB_URL || DB_URL; //on MongoDB Atlas 
-//var mongoDbUrl ='mongodb+srv://Nawel:MongoDB@mongodbatlascluster-t0n3g.mongodb.net/test?retryWrites=true&w=majority;'
-
 var dbName =  process.env.DB_NAME || DB_NAME; //by default
-//var dbName ='test'
 var currentDb=null; //current MongoDB connection
 
 var setMongoDbUrl = function(dbUrl){
