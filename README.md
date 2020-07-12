@@ -1,6 +1,5 @@
-#    Projet_Al04_Scraping
+
 # ChemEventz - Scraper
-______________________________________
 &nbsp;
 ## About ChemEventz!
 
