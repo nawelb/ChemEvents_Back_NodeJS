@@ -146,7 +146,10 @@ apiRouter.route('/event-api/public/search')
 			{description: { $regex: research, $options:'i'} }, 
 			{tags: { $regex: research, $options:'i'} },  
 			{city: { $regex: research, $options:'i'} }, 
-			{country: { $regex: research, $options:'i'} } 
+			{country: { $regex: research, $options:'i'} },
+			{dateDebut: { $regex: research, $options:'i'} },
+			{dateFin: { $regex: research, $options:'i'} } 
+ 
 		] } ;
 		myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
 			   res.send(event);
