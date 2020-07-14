@@ -5,6 +5,7 @@ var assert = require('assert');
 
 var mongoDbUrl = process.env.DB_URL || DB_URL; //on MongoDB Atlas 
 var dbName =  process.env.DB_NAME || DB_NAME; //by default
+
 var currentDb=null; //current MongoDB connection
 
 var setMongoDbUrl = function(dbUrl){
