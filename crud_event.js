@@ -1,6 +1,6 @@
 var express = require('express');
 const apiRouter = express.Router();
-
+var dbCollection =  process.env.DB_COLLECTION || DB_COLLECTION;
 //var app = express();
 var myGenericMongoClient = require('./my_generic_mongo_client');
 
@@ -14,7 +14,7 @@ apiRouter.route('/event-api/private/event')
 	var nouvelEvent = req.body;
 	console.log("POST,nouvelEvent="+JSON.stringify(nouvelEvent));
 	nouvelEvent._id=nouvelEvent.title1;
-	myGenericMongoClient.genericInsertOne('eventtest',
+	myGenericMongoClient.genericInsertOne(dbCollection,
                                             nouvelEvent,
 									     function(err, event ){
 										     res.send(nouvelEvent);
@@ -29,7 +29,7 @@ apiRouter.route('/event-api/private/role-admin/updateEvent')
 .put( function(req , res  , next ) {
 	var newValueOfEventToUpdate = req.body;
 	console.log("PUT,newValueOfEventToUpdate="+JSON.stringify(newValueOfEventToUpdate));
-	myGenericMongoClient.genericUpdateOne('eventtest',
+	myGenericMongoClient.genericUpdateOne(dbCollection,
 	newValueOfEventToUpdate._id ,
 	{ 
 		title1 : newValueOfEventToUpdate.title1,
@@ -68,7 +68,7 @@ apiRouter.route('/event-api/public/events')
 .get( function(req , res  , next ) {
 	var changeMini = req.query.changeMini;
 	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
-	myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+	myGenericMongoClient.genericFindList(dbCollection,mongoQuery,function(err,event){
 		   res.send(event);
 	});//end of genericFindList()
 });
@@ -79,7 +79,7 @@ apiRouter.route('/event-api/public/event/:_id')
 .get( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("OOOKKK")
-	myGenericMongoClient.genericFindOne('eventtest',
+	myGenericMongoClient.genericFindOne(dbCollection,
 										{ '_id' : idEvent },
 									    function(err,event){
 										   res.send(event);
@@ -103,7 +103,7 @@ if (cityParam != undefined){
 	var mongoQuery = countryParam ? { country : countryParam } : { } ;
 	//console.log("country" + countryParam)
 }
- myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
+ myGenericMongoClient.genericFindList(dbCollection, mongoQuery, function(err, event) {
 	if (err)
 		res.send(err);
 
@@ -120,7 +120,7 @@ apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 .delete( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericRemove('eventtest', { _id : idEvent } ,
+	myGenericMongoClient.genericRemove(dbCollection, { _id : idEvent } ,
 									     function(err,event){
 										     res.send({ Deleted :idEvent} );
 									    });
@@ -151,7 +151,7 @@ apiRouter.route('/event-api/public/search')
 			{dateFin: { $regex: research, $options:'i'} } 
  
 		] } ;
-		myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+		myGenericMongoClient.genericFindList(dbCollection,mongoQuery,function(err,event){
 			   res.send(event);
 		});//end of genericFindList()
 });
