@@ -1,6 +1,6 @@
-
-# ChemEventz - Scraper
+# ChemEventz - NodeJS API
 &nbsp;
+
 ## About ChemEventz!
 
 ChemEventz is a web application that tracks chemical events around the world. 
@@ -42,19 +42,20 @@ Different technologies used to deploy ChemEventz project:
 
 &nbsp;
 ______________________________________
+
 &nbsp;
 # ChemEventz - NodeJS API
 
 ### Tech Dev
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
-* [MongoDB] - collecte all scraped events
+* [Node.js] - - v12 for the backend
+* [Express] - fast node.js network app framework
+* [MongoDB] - save all events after treatment
 
 
 
 ### Installation
 
-ChemEventz requires [Node.js](https://nodejs.org/) v12 to run.
+ChemEventz requires [Node.js](https://nodejs.org/) V12 to run.
 
 Create new folder
 
@@ -95,6 +96,7 @@ POST
 /DELETE
 - /event-api/private/role-admin/deleteEvent/:_id  : replace ":_id" by an event id in the db, to delete an event by id
 
+
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
 
@@ -114,3 +116,7 @@ POST
   [AWS RDS]: <https://aws.amazon.com/fr/rds/>
   [Mongo Atlas]: <https://www.mongodb.com/cloud/atlas>
   [MongoDB]: <https://www.mongodb.com/fr>
+
+
+
+
