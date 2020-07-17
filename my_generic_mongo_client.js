@@ -4,7 +4,7 @@ var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert'); 
 
 var mongoDbUrl = process.env.DB_URL || DB_URL; //on MongoDB Atlas 
-var dbName =  process.env.DB_NAME || DB_NAME; //by default
+var dbName =  process.env.DB_NAME || DB_NAME; 
 
 var currentDb=null; //current MongoDB connection
 

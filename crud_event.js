@@ -1,20 +1,20 @@
 var express = require('express');
 const apiRouter = express.Router();
-
+var dbCollection =  process.env.DB_COLLECTION || DB_COLLECTION;
 //var app = express();
 var myGenericMongoClient = require('./my_generic_mongo_client');
 
 
 //CREATE
-// http://localhost:3000/event-api/private/role-admin/event en mode post
-// avec { "title1" : "mxyz" , "title2" : "monnaieXyz", "img1" : "null", "img2" : "null", "description" : "null", "date" : "null", "lieu": "null", "email": "null", 
-//    "siteWeb": "null", "tags" : "null" } dans req.body
+// http://localhost:3000/event-api/private/event (POST)
+/* avec { "title1" : "title1" , "title2" : "title2", "img1" : "http://..img.png", "img2" : "http://..img.png", "description" : "description", "date" : "date", "lieu": "lieu", "email": "email", 
+    "siteWeb": "siteWeb", "tags" : "tags" } dans req.body*/
 apiRouter.route('/event-api/private/event')
 .post( function(req , res  , next ) {
 	var nouvelEvent = req.body;
 	console.log("POST,nouvelEvent="+JSON.stringify(nouvelEvent));
 	nouvelEvent._id=nouvelEvent.title1;
-	myGenericMongoClient.genericInsertOne('eventtest',
+	myGenericMongoClient.genericInsertOne(dbCollection,
                                             nouvelEvent,
 									     function(err, event ){
 										     res.send(nouvelEvent);
@@ -22,14 +22,14 @@ apiRouter.route('/event-api/private/event')
 });
 
 //UPDATE
-// http://localhost:3000/event-api/private/role-admin/event en mode PUT
-// avec { "title1" : "mxyz" , "title2" : "monnaieXyz", "img1" : "null", "img2" : "null", "description" : "null", "date" : "null", "lieu": "null", "email": "null", 
-//    "siteWeb": "null", "tags" : "null" } dans req.body
+// http://localhost:3000/event-api/private/role-admin/updateEvent (PUT)
+/* avec { "title1" : "title1" , "title2" : "title2", "img1" : "http://..img.png", "img2" : "http://..img.png", "description" : "description", "date" : "date", "lieu": "lieu", "email": "email", 
+    "siteWeb": "siteWeb", "tags" : "tags" } dans req.body*/
 apiRouter.route('/event-api/private/role-admin/updateEvent')
 .put( function(req , res  , next ) {
 	var newValueOfEventToUpdate = req.body;
 	console.log("PUT,newValueOfEventToUpdate="+JSON.stringify(newValueOfEventToUpdate));
-	myGenericMongoClient.genericUpdateOne('eventtest',
+	myGenericMongoClient.genericUpdateOne(dbCollection,
 	newValueOfEventToUpdate._id ,
 	{ 
 		title1 : newValueOfEventToUpdate.title1,
@@ -62,13 +62,13 @@ apiRouter.route('/event-api/private/role-admin/updateEvent')
 
 
 //GET ALL
-//exemple URL: http://localhost:3000/devise-api/public/devise (returning all event)
-//             http://localhost:3000/devise-api/public/devise?changeMini=2020-01-01
+//exemple URL: http://localhost:3000/event-api/public/events (returning all event)
+//             http://localhost:3000/event-api/public/events?changeMini=2020-01-01
 apiRouter.route('/event-api/public/events')
 .get( function(req , res  , next ) {
 	var changeMini = req.query.changeMini;
 	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
-	myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+	myGenericMongoClient.genericFindList(dbCollection,mongoQuery,function(err,event){
 		   res.send(event);
 	});//end of genericFindList()
 });
@@ -79,7 +79,7 @@ apiRouter.route('/event-api/public/event/:_id')
 .get( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("OOOKKK")
-	myGenericMongoClient.genericFindOne('eventtest',
+	myGenericMongoClient.genericFindOne(dbCollection,
 										{ '_id' : idEvent },
 									    function(err,event){
 										   res.send(event);
@@ -88,7 +88,7 @@ apiRouter.route('/event-api/public/event/:_id')
 
 
 //GET COMBINAISON CITY & COUNTRY
-//exemple URL: localhost:3000/event-api/public/event (returning all devises)
+//exemple URL: localhost:3000/event-api/public/event (returning all events)
 //             http://localhost:3000/event-api/public/event?country=France
 apiRouter.route('/event-api/public/event')
 .get( function(req , res  , next ) {
@@ -103,7 +103,7 @@ if (cityParam != undefined){
 	var mongoQuery = countryParam ? { country : countryParam } : { } ;
 	//console.log("country" + countryParam)
 }
- myGenericMongoClient.genericFindList("eventtest", mongoQuery, function(err, event) {
+ myGenericMongoClient.genericFindList(dbCollection, mongoQuery, function(err, event) {
 	if (err)
 		res.send(err);
 
@@ -112,15 +112,13 @@ if (cityParam != undefined){
 	
 }); 
 
-
-
 //DELETE BY ID
 // http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
 apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 .delete( function(req , res  , next ) {
 	var idEvent = req.params._id;
 	console.log("DELETE,eventId="+idEvent);
-	myGenericMongoClient.genericRemove('eventtest', { _id : idEvent } ,
+	myGenericMongoClient.genericRemove(dbCollection, { _id : idEvent } ,
 									     function(err,event){
 										     res.send({ Deleted :idEvent} );
 									    });
@@ -132,8 +130,7 @@ apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 
 
 //GET BY KEY WORD
-//exemple URL: http://localhost:3000/devise-api/public/devise (returning all event)
-//             http://localhost:3000/event-api/public/search?research=word
+//exemple URL: http://localhost:3000/event-api/public/search?research=word
 apiRouter.route('/event-api/public/search')
 .get( function(req , res  , next ) {
 	var research = req.query.research;
@@ -151,7 +148,7 @@ apiRouter.route('/event-api/public/search')
 			{dateFin: { $regex: research, $options:'i'} } 
  
 		] } ;
-		myGenericMongoClient.genericFindList('eventtest',mongoQuery,function(err,event){
+		myGenericMongoClient.genericFindList(dbCollection,mongoQuery,function(err,event){
 			   res.send(event);
 		});//end of genericFindList()
 });

@@ -25,11 +25,11 @@ ChemEventz is divided into 5 parts available in my Github account  [public repos
 Dillinger uses a number of open source projects to work properly:
 
 * [Angular] - HTML enhanced for web apps!
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [node.js] -  v12 for the backend
+* [Express] - fast node.js network app framework
 * [Spring Boot] - focus on application-level business logic
-* [MongoDB]
-* [Mysql]
+* [MongoDB] - non-relationnal database for events storage
+* [Mysql] - relational dataBase for users data storage
 
 ### Tech Prod
 
@@ -47,7 +47,7 @@ ______________________________________
 # ChemEventz - NodeJS API
 
 ### Tech Dev
-* [Node.js] - - v12 for the backend
+* [Node.js] - V12 for the backend
 * [Express] - fast node.js network app framework
 * [MongoDB] - save all events after treatment
 
@@ -68,7 +68,7 @@ then, create .env file in root directory and add :
  - PORT : free port to allow this application to run
  - DB_NAME : as name of your database [cf scraping project]
  - DB_URL : as url of MongoDB Atlas where the scraping data are stored [cf scraping project]
-
+ - DB_COLLECTION : as the name of the collection you choose [cf scraping project]
 
 ### Run NodeJS API
 
@@ -116,7 +116,7 @@ POST
   [AWS RDS]: <https://aws.amazon.com/fr/rds/>
   [Mongo Atlas]: <https://www.mongodb.com/cloud/atlas>
   [MongoDB]: <https://www.mongodb.com/fr>
-
+[MySQL]:<https://www.mysql.com/fr/>
 
 
 
