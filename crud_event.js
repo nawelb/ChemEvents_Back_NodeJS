@@ -22,7 +22,7 @@ apiRouter.route('/event-api/private/event')
 });
 
 //UPDATE
-// http://localhost:3000/event-api/private/role-admin/updateEvent (PUT)
+// http://localhost:3000/event-api/private/role-admin/updateEvent   (PUT)
 /* avec { "title1" : "title1" , "title2" : "title2", "img1" : "http://..img.png", "img2" : "http://..img.png", "description" : "description", "date" : "date", "lieu": "lieu", "email": "email", 
     "siteWeb": "siteWeb", "tags" : "tags" } dans req.body*/
 apiRouter.route('/event-api/private/role-admin/updateEvent')
