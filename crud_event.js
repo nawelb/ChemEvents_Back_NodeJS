@@ -4,7 +4,6 @@ var dbCollection =  process.env.DB_COLLECTION || DB_COLLECTION;
 //var app = express();
 var myGenericMongoClient = require('./my_generic_mongo_client');
 
-
 //CREATE
 // http://localhost:3000/event-api/private/event (POST)
 /* avec { "title1" : "title1" , "title2" : "title2", "img1" : "http://..img.png", "img2" : "http://..img.png", "description" : "description", "date" : "date", "lieu": "lieu", "email": "email", 
@@ -60,13 +59,12 @@ apiRouter.route('/event-api/private/role-admin/updateEvent')
 	});	//end of genericUpdateOne()
 });
 
-
 //GET ALL
 //exemple URL: http://localhost:3000/event-api/public/events (returning all event)
 //             http://localhost:3000/event-api/public/events?changeMini=2020-01-01
 apiRouter.route('/event-api/public/events')
 .get( function(req , res  , next ) {
-	var changeMini = req.query.changeMini;
+	var changeMini = req.query.changeMini; // en prévision de la methode get with dateMinimum
 	var mongoQuery = changeMini ? { date: { $gte: date }  } : { } ;
 	myGenericMongoClient.genericFindList(dbCollection,mongoQuery,function(err,event){
 		   res.send(event);
@@ -85,7 +83,6 @@ apiRouter.route('/event-api/public/event/:_id')
 										   res.send(event);
 									   });
 }); 
-
 
 //GET COMBINAISON CITY & COUNTRY
 //exemple URL: localhost:3000/event-api/public/event (returning all events)
@@ -108,8 +105,7 @@ if (cityParam != undefined){
 		res.send(err);
 
 	res.json(event);
-}); 
-	
+}); 	
 }); 
 
 //DELETE BY ID
@@ -123,11 +119,6 @@ apiRouter.route('/event-api/private/role-admin/deleteEvent/:_id')
 										     res.send({ Deleted :idEvent} );
 									    });
 });
-
-
-
-
-
 
 //GET BY KEY WORD
 //exemple URL: http://localhost:3000/event-api/public/search?research=word
